@@ -1,5 +1,5 @@
 # interview_data
-</br>
+
 ## 1.简历重写
 
 ## 2.Lua源码相关
@@ -17,11 +17,11 @@
 [c.Python的list 和 map 的实现原理</br>]()
 	
 ## 4.数据库相关
-[a.MySQL引擎相关， MyIsam 和 InnoDB的区别</br>]()
-[b.mongodb 和 mysql的区别</br>]()
-[c.mongodb引擎，内存方面需要注意的点</br>]()
-[d.数据库的索引怎么建立， B+树</br>]()
-[e.内联和外联的查询；怎么优化数据库查询语句</br>]()
+[a.MySQL引擎相关， MyIsam 和 InnoDB的区别</br>](sql.md)
+[b.mongodb 和 mysql的区别</br>](sql.md)
+[c.mongodb引擎，内存方面需要注意的点</br>](sql.md)
+[d.数据库的索引怎么建立， B+树</br>](sql.md)
+[e.内联和外联的查询；怎么优化数据库查询语句</br>](sql.md)
 
 ## 5.网络编程
 [a.三次握手，四次挥手</br>](TCP.md)
@@ -40,10 +40,10 @@
 [f.linux上的通信模型（消息队列，信号量，锁，管道）</br>]()
 
 ## 7.C/C++
-[a.内存对齐（struct字节数计算）</br>]()
-[b.C++虚函数（多态）</br>]()
-[c.jemalloc</br>]()
-[d.new和malloc的区别</br>]()
+[a.内存对齐（struct字节数计算）</br>](c.md)
+[b.C++虚函数（多态）</br>](c.md)
+[c.jemalloc</br>](c.md)
+[d.new和malloc的区别</br>](c.md)
 	
 ## 8.skynet
 [a.actor模型</br>](actor.md)
@@ -54,9 +54,9 @@
 [f.skynet.call是一个rpc模型</br>](skynet.md)
 
 ## 9.项目相关
-[a.游戏服务器结构，代码结构</br>]()
+[a.游戏服务器结构，代码结构</br>](game_dev.md)
 [b.游戏战斗逻辑</br>]()
-[c.游戏登陆流程，二维码登陆流程</br>]()
+[c.游戏登陆流程，二维码登陆流程</br>](game.md)
 [d.游戏服务器压测</br>]()
 [e.robot的实现</br>]()
 [f.游戏服务器的优化措施（网络，cpu性能，内存相关）</br>]()
