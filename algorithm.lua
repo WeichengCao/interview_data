@@ -1,4 +1,6 @@
+-----------------排序---------------
 -----------------快排---------------
+--最坏O(n^2), 最好O(nlog(n)), 平均O(nlog(n)), 非稳定排序
 function quicksort(l, s, e)
 	if s < e then
 		local p = partition(l, s, e)
@@ -27,6 +29,7 @@ function swap(l, i, j)
 end
 
 ----------------堆排--------------------
+--最坏O(nlog(n)), 最好O(nlog(n)), 平均O(nlog(n)), 非稳定排序
 function heapify(l, i, e)
 	local left = 2 * i
 	local right = 2*i + 1
@@ -57,7 +60,7 @@ function heapsort(l, s, e)
 end
 
 ------------冒泡排序-------------
-
+--最好O(n), 最坏O(n^2), 平均O(n^2); 是稳定排序
 function bubblesort(l)
 	for i = 1, #l do
 		for j = i+1, #l do
@@ -70,6 +73,7 @@ end
 
 
 ------------归并排序--------------
+--最好O(nlog(n)), 最坏O(nlog(n)),平均O(nlog(n)), 是稳定排序
 function mergesort(l, s, e)
 	if s < e then
 		local m = math.floor((s+e)/2)
@@ -113,6 +117,248 @@ function merge(l, s, m, e)
 end
 
 
+-----------------查找---------------
+-----------------顺序查找-----------
+--最坏O(n) 最快O(1)
+function normalsearch(l, key)
+	for k, v in ipairs(l) do
+		if v == key then
+			return k
+		end
+	end
+end
+
+-----------------二分查找-----------
+--前提是有序列表, 最坏O(log(n)), 最好O(1)
+function binarysearch(l, key, s, e)
+	while s <= e do
+		local m = math.floor((s+e)/2)
+		if l[m] == key then
+			return m
+		elseif l[m] > key then
+			e = m - 1
+		else
+			s = s + 1
+		end
+	end
+end
+
+----------------哈希查找-----------------
+
+
+-----------------二叉树------------------
+----------------先序遍历-----------------
+function preorder(t)
+	if t then
+		print(t.val)
+		preorder(t.left)
+		preorder(t.right)
+	end
+end
+
+
+----------------中序遍历-----------------
+function inorder(t)
+	if t then
+		inorder(t.left)
+		print(t.val)
+		inorder(t.right)
+	end
+end
+
+----------------后序遍历-----------------
+function tailorder(t)
+	if t then
+		tailorder(t.left)
+		tailorder(t.right)
+		print(t.val)
+	end
+end
+
+----------------二叉查找树---------------
+function treesearch(t, k)
+	if t then
+		if t.val == k then
+			return t
+		elseif t.val < k then
+			return treesearch(t.right, k)
+		else
+			return treesearch(t.left, k)
+		end
+	end
+end
+
+function treesearch(t, k)
+	local n = t
+	while n do
+		if n.val == k then
+			return n
+		elseif n.val < k then
+			n = n.right
+		else
+			n = n.left
+		end
+	end
+end
+
+function minval(t)
+	local n = t
+	while n do
+		if n.left then
+			n = n.left
+		else
+			return n
+		end
+	end
+end
+
+function maxval(t)
+	local n = t
+	while n do
+		if n.right then
+			n = n.right
+		else
+			return n
+		end
+	end
+end
+
+--后继节点
+function successor(t)
+	if not t then return end
+	if t.right then
+		return minval(t.right)
+	end
+	local p = t.parent
+	if p and p.left == t then
+		return p
+	end
+	while p and p.right == t do
+		t = p
+		p = t.parent
+	end
+	return p
+end
+
+function predecessor(t)
+	if not t then return end
+	if t.left then
+		return maxval(t.left)
+	end
+	local p = t.parent
+	if p and p.right == t then
+		return p
+	end
+	while p and p.left = t do
+		t = p
+		p = t.parent
+	end
+	return p
+end
+
+function newnode(v)
+	return {val = v, left = nil, right = nil, parent = nil}
+end
+
+function insertnode(t, v)
+	local n = newnode(v)
+	if t == nil then
+		t = n
+		return t
+	end
+	local pre = nil
+	while t do
+		pre = t
+		if t.val <= v then
+			t = t.right
+		else
+			t = t.left
+		end
+	end
+	if pre then
+		if pre.val <= v then
+			pre.right = n
+		else
+			pre.left = n
+		end
+		n.parent = pre
+	end
+end
+
+function delnode(t, n)
+	if not n.left and not n.right then
+		local p = n.parent
+		n.partent = nil
+		if p.left == n then
+			p.left = nil
+		else
+			p.right = nil
+		end
+	end
+	if n.left and n.right then
+		local k = successor(n)
+		n.val = k.val
+		delnode(t, k)
+	else
+		p = n.parent
+		n.parnet = nil
+		local k = n.left or n.right
+		n.left = nil
+		n.right = nil
+		if p.left == n then
+			p.left = k
+		else
+			p.right = k
+		end
+	end
+end
+
+----------------红黑树---------------
+--跟节点一定为黑
+--叶子节点一定为黑，为(nil)
+--红节点的子女一定为黑
+--任意节点到其子孙节点的所有路径上包含相同数目的黑节点(算法导论)
+--Every path from a given node to any of its descendant NIL nodes contains the same number of black nodes.(维基百科)
+--所以应该是任意节点到其叶子节点的所有路径上包含有相同数目的黑节点
+--
+
+--    y      x           
+--  x  c   a   y         
+--a  b        b  c       
+
+function right_rotate(t, y)
+	local x = y.left
+	if not x then return end
+
+	b = x.right
+	x.parent = y.parent
+	x.right = y
+	y.left = b
+	y.parent = x
+	if b then
+		b.parent = y
+	end
+	if x.parent == nil then
+		t = x
+	end
+end
+
+function left_rotate(t, x)
+	local y = x.right
+	if not y then return end
+	
+	b = y.left
+	y.left = x
+	y.parent = x.parent
+	x.right = b
+	x.parent = y
+	if b then
+		b.parent = x
+	end
+	if y.parent == nil then
+		t = y
+	end
+end
 
 function print_list(l)
 	local ll = {}
