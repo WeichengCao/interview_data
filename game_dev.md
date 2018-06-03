@@ -140,7 +140,7 @@ lualib/base/reload.lua
 	5.make install
 
 
-编译pbc的时候采用了一种比较取巧的方式，直接将pbc:https://github.com/cloudwu/pbc.git下中我们所需要的文件放入到skynet下的pbc文件夹下，有makefile，src，pbc.h，将pbc/binding下的pbc-lua53放到pbc下，然后通过改写skynet/Makefile文件直接进行编译导入,最终，我们的使用方式和pbc/binding下介绍的一致,只是我们将protobuff.lua文件放到了game_dev/lualib/base下,这样我们就可以直接require "base.protobuf" 使用它
+编译pbc的时候采用了一种比较取巧的方式，直接将pbc， https://github.com/cloudwu/pbc.git 下中我们所需要的文件放入到skynet下的pbc文件夹下，有makefile，src，pbc.h，将pbc/binding下的pbc-lua53放到pbc下，然后通过改写skynet/Makefile文件直接进行编译导入,最终，我们的使用方式和pbc/binding下介绍的一致,只是我们将protobuff.lua文件放到了game_dev/lualib/base下,这样我们就可以直接require "base.protobuf" 使用它
 
 在这个游戏框架中，我将协议放到了proto/下， proto/base.proto 用于放置各个协议通用数据结构，proto/server/x.proto 下放置的是服务端下行协议，统一命名方式是GS2CXXXX， proto/client/x.proto 下放置的是客户端上行协议,统一命名方式是C2GSXXXX。通过shell/make_proto.sh
 进行协议的编译，编译结果为proto/proto.pb文件

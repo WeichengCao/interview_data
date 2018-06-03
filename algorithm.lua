@@ -360,6 +360,177 @@ function left_rotate(t, x)
 	end
 end
 
+function rb_newnode(v)
+	return {val = v, left = nil, right = nil, parent = nil, color = "red"}
+end
+
+function rb_insert(t, v)
+	local n = newnode(v)
+	if t == nil then
+		t = n
+		n.color = "black"
+		return t
+	end
+	local pre = nil
+	while t do
+		pre = t
+		if t.val <= v then
+			t = t.right
+		else
+			t = t.left
+		end
+	end
+	if pre then
+		if pre.val <= v then
+			pre.right = n
+		else
+			pre.left = n
+		end
+		n.parent = pre
+	end
+	rb_insert_fixup(t, n)
+end
+
+function rb_insert_fixup(t, n)
+	local p = rb_parent(n)
+	if not p then
+		rb_insert_fixup1(t, n)
+	elseif p.color == "black" then
+		rb_insert_fixup2(t, n)
+	elseif rb_uncle(n) and rb_uncle(n).color == "red" then
+		rb_insert_fixup3(t, n)
+	else
+		rb_insert_fixup4(t, n)
+	end
+end
+
+function rb_insert_fixup1(t, n)
+	if not rb_parent(n) then
+		n.color = "black"
+	end
+end
+
+function rb_insert_fixup2(t, n)
+	return
+end
+
+function rb_insert_fixup3(t, n)
+	local p = rb_parent(n)
+	if p then
+		p.color = "black"
+		rb_uncle(n).color = "black"
+		rb_grandparent(n).color = "red"
+		rb_insert_fixup(t, rb_grandparent(n))
+	end
+end
+
+function rb_insert_fixup4(t, n)
+	--父亲是红，叔叔是黑，自己是红
+	local p = rb_parent(n)
+	local pp = rb_grandparent(n)
+	if pp and pp.left.right == n then
+		left_rotate(t, p)
+		n = n.left
+	elseif pp and pp.right.left == n then
+		right_rotate(t, p)
+		n = n.right
+	end
+	rb_insert_fixup4_2(t, n)
+end
+
+function rb_insert_fixup4_2(t, n)
+	local p = rb_parent(n)
+	local pp = rb_grandparent(n)
+	if not p or not pp then
+		return
+	end
+	if p = pp.left then
+		right_rotate(pp)
+	else
+		left_roate(pp)
+	end
+	p.color = "black"
+	pp.color = "red"
+end
+
+function rb_parent(n)
+	return n.parent
+end
+
+function rb_grandparent(n)
+	local p = rb_parent(n)
+	if p then
+		return rb_parent
+	end
+end
+
+function rb_sibling(n)
+	local p = rb_parent(n)
+	if p then
+		if p.left == n then
+			return p.right
+		else
+			return p.left
+		end
+	end
+end
+
+function rb_uncle(n)
+	local p = rb_parent(n)
+	if p then
+		return rb_sibling(p)
+	end
+end
+
+
+
+--------------------数据结构的扩张--------------
+--红黑树应用
+--size[x] = size[left(x)] + size[right(x)] + 1
+
+--选择第i小的元素
+function size(n)
+	return n and n.size or 0
+end
+
+function os_select(t, i)
+	local compare = size(t.left) + 1
+	if i == compare then
+		return t
+	elseif i > compare then
+		os_select(right[t], i-compare)
+	else
+		os_select(left[t], i)
+	end
+end
+
+function os_rank(t, x)
+	local r = size(x.left) + 1
+	y = x
+	while y.parent do --//非根节点
+		if y == y.parent.right then
+			r = r + size(y.parent.left) + 1
+			y = y.parent
+		end
+	end
+	return r
+end
+
+function os_left_rotate(t, x)
+	local y = x.right
+	left_rotate(t, x)
+	y.size = x.size
+	x.size = size(x.left) + size(x.right) + 1
+end
+
+function os_right_rotate(t, y)
+	local x = y.left
+	right_rotate(t, y)
+	x.size = y.size
+	y.size = size(y.left) + size(y.right) + 1
+end
+
+
 function print_list(l)
 	local ll = {}
 	for _, val in ipairs(l) do
